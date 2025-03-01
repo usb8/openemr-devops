@@ -5,11 +5,13 @@ metadata:
     name: openemr
   name: openemr
 spec:
-  type: LoadBalancer
+  type: NodePort
   ports:
   - name: "http"
     port: 8080
     targetPort: 80
+    protocol: TCP
+    nodePort: 30002
   - name: "https"
     port: 8090
     targetPort: 443
