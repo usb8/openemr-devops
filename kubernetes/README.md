@@ -79,7 +79,8 @@ Would not consider this production quality, but will be a good working, starting
           statefulset.apps/redis       3/3     111s
           statefulset.apps/sentinel    3/3     111s
           ```
-4. Getting the url link to OpenEMR:
+4. Access openemr web: `http://<externalIp>:30002` or `localhost:30002`
+<!-- 4. Getting the url link to OpenEMR:
     - If using minikube, can get the link to go to OpenEMR with following command (use the top link for http and bottom link for https):
         ```bash
         minikube service openemr --url
@@ -91,8 +92,7 @@ Would not consider this production quality, but will be a good working, starting
             ```
     - If using kind, then can use the 3***** port(s) (1st is http, 2nd is https) shown in step 3 (at `service/openemr`) above with the ip address obtained from following command:
         ```bash
-        docker inspect kind-control-plane | grep "IPAddress"
-        ```
+        docker inspect kind-control-plane | grep "IPAddress" -->
 5. Getting the url link to phpMyAdmin:
     - If using minikube, can get the link to go to phpMyAdmin with following command:
         ```bash
@@ -147,15 +147,16 @@ Would not consider this production quality, but will be a good working, starting
         ```bash
         kubectl scale sts mysql-sts --replicas=3
         ```
-8. To stop and remove OpenEMR orchestration (this will delete everything):
+<!-- 8. To stop and remove OpenEMR orchestration (this will delete everything): -->
+8. To stop and remove OpenEMR orchestration (this will delete everything except volumes):
     ```bash
     bash kub-down
     ```
-    - For Kind, also need to delete the cluster:
+    <!-- - For Kind, also need to delete the cluster:
         ````bash
         kind delete cluster
         ````
     - Additionally, if using Kind with 4 nodes, then also need to delete the shared volume at /tmp/hostpath-provisioner
         ````bash
         sudo rm -fr /tmp/hostpath-provisioner
-        ````
+        ```` -->
