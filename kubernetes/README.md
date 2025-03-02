@@ -80,6 +80,7 @@ Would not consider this production quality, but will be a good working, starting
           statefulset.apps/sentinel    3/3     111s
           ```
 4. Access openemr web: `http://<externalIp>:30002` or `localhost:30002`
+  - Login with: admin/pass
 <!-- 4. Getting the url link to OpenEMR:
     - If using minikube, can get the link to go to OpenEMR with following command (use the top link for http and bottom link for https):
         ```bash
