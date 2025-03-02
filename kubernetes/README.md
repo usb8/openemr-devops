@@ -147,8 +147,13 @@ Would not consider this production quality, but will be a good working, starting
         ```bash
         kubectl scale sts mysql-sts --replicas=3
         ```
-<!-- 8. To stop and remove OpenEMR orchestration (this will delete everything): -->
-8. To stop and remove OpenEMR orchestration (this will delete everything except volumes):
+
+8. Monitor:
+  - Take a look at ./monitor/
+  - Another option: ../utilities/openemr-monitor
+
+<!-- 9. To stop and remove OpenEMR orchestration (this will delete everything): -->
+9. To stop and remove OpenEMR orchestration (this will delete everything except volumes):
     ```bash
     bash kub-down
     ```

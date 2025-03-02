@@ -10,6 +10,10 @@ spec:
   ports:
   - port: 3306
     name: mysql-port
+  # - protocol: TCP
+  #   port: 9104
+  #   targetPort: 9104
+  #   name: metrics
   clusterIP: None
   selector:
     statefulset.kubernetes.io/pod-name: mysql-sts-0

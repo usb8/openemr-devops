@@ -86,6 +86,14 @@ spec:
           mountPath: /etc/mysql/conf.d/
         - name: initdb
           mountPath: /docker-entrypoint-initdb.d
+      # - name: metrics-exporter
+      #   image: prom/mysqld-exporter:v0.14.0
+      #   ports:
+      #     - containerPort: 9104
+      #       name: metrics
+      #   env:
+      #     - name: DATA_SOURCE_NAME
+      #       value: "root:root@(localhost:3306)/"      
       volumes:
       - name: mysql-server-certs
         secret:
