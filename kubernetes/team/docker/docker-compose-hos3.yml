@@ -1,0 +1,73 @@
+# Use admin/pass as user/password credentials to login to openemr (from OE_USER and OE_PASS below)
+# MYSQL_HOST and MYSQL_ROOT_PASS are required for openemr
+# MYSQL_USER, MYSQL_PASS, OE_USER, MYSQL_PASS are optional for openemr and
+#   if not provided, then default to openemr, openemr, admin, and pass respectively.
+#
+# NOTE need to change command from mysqld to mariadbd when update to mariadb 11.4
+#
+services:
+  # mysql-3:
+  #   restart: always
+  #   image: mariadb:10.11
+  #   container_name: mysql-3
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: root
+  #     MYSQL_DATABASE: openemr
+  #     MYSQL_USER: root
+  #     MYSQL_PASSWORD: root
+  #   ports:
+  #     - "3307:3306"
+  #   command: [
+  #     'mysqld',
+  #     '--server-id=3'
+  #   ]
+  #   networks:
+  #     - shared_network
+
+  # openemr:
+  #   restart: always
+  #   image: openemr/openemr:7.0.2
+  #   container_name: openemr-3
+  #   ports:
+  #   - 80:80
+  #   - 443:443
+  #   volumes:
+  #   - logvolume01:/var/log
+  #   - sitevolume:/var/www/localhost/htdocs/openemr/sites
+  #   environment:
+  #     MYSQL_HOST: mysql-3
+  #     MYSQL_ROOT_PASS: root
+  #     MYSQL_USER: openemr
+  #     MYSQL_PASS: openemr
+  #     OE_USER: admin
+  #     OE_PASS: pass
+  #   depends_on:
+  #   - mysql-3
+  #   networks:
+  #     - shared_network
+
+  kafka-3:
+    image: wurstmeister/kafka:2.13-2.8.1
+    container_name: kafka-3
+    restart: always
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 3
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9094
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-3:9094
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+    ports:
+      - "9094:9094"
+    networks:
+      - shared_network
+
+# volumes:
+#   logvolume01: {}
+#   sitevolume: {}
+#   databasevolume: {}
+
+networks:
+  shared_network:
+    external: true
