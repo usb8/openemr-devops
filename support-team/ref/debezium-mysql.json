@@ -1,0 +1,22 @@
+{
+    "name": "mariadb-connector",
+    "config": {
+        "connector.class": "io.debezium.connector.mysql.MySqlConnector",
+        "database.hostname": "mysql",
+        "database.port": "3306",
+        "database.user": "debezium",
+        "database.password": "debezium_password",
+        "database.server.id": "184054",
+        "database.include.list": "openemr",
+        "database.history.kafka.bootstrap.servers": "kafka-1:9092,kafka-2:9093,kafka-3:9094",
+        "database.history.kafka.topic": "mariadb_history",
+        "topic.prefix": "openemr-changes",
+        "database.allowPublicKeyRetrieval": "true",
+        "database.serverTimezone": "UTC",
+        "schema.history.internal.kafka.bootstrap.servers": "kafka-1:9092,kafka-2:9093,kafka-3:9094",
+        "schema.history.internal.kafka.topic": "mariadb_schema_history",
+        "include.schema.changes": "true",
+        "snapshot.mode": "initial",
+        "table.exclude.list": "benefit_eligibility,gacl_aro_sections_seq,gacl_acl_seq,edi_sequences,modules_settings,gacl_aco_seq,form_functional_cognitive_status,gacl_aco_sections_seq,version,gacl_aro_groups_id_se_id_seq,fee_sheet_options,module_acl_sections,gacl_aro_seq,lang_custom,sequences,form_observation,form_care_plan"
+    }
+}

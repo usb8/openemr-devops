@@ -1,0 +1,95 @@
+1. Docker file is provided
+
+2. Place debezium-mysql.json and jdbc-sink.json in the smae folder
+Idea is that debezium creates records of changes 
+JDBC processes those records and inserts them in replica database
+
+3. Install Kafka and zookeeper. Example below:
+    sudo apt update
+    sudo apt install -y openjdk-11-jdk
+    wget https://downloads.apache.org/kafka/3.5.0/kafka_2.13-3.5.0.tgz
+    tar -xvzf kafka_2.13-3.5.0.tgz
+    cd kafka_2.13-3.5.0
+
+4. Start Kafka
+    bin/zookeeper-server-start.sh config/zookeeper.properties &
+    bin/kafka-server-start.sh config/server.properties &
+
+5. Install Debezium Kafka Connector:
+    cd kafka_2.13-3.5.0
+    mkdir plugins
+    cd plugins
+    wget https://repo1.maven.org/maven2/io/debezium/debezium-connector-mysql/2.4.1.Final/debezium-connector-mysql-2.4.1.Final-plugin.tar.gz
+    tar -xvzf debezium-connector-mysql-2.4.1.Final-plugin.tar.gz
+
+Then install JDBC connector same way
+    wget https://repo1.maven.org/maven2/io/debezium/debezium-connector-jdbc/2.4.1.Final/debezium-connector-jdbc-2.4.1.Final-plugin.tar.gz
+    tar -xvzf debezium-connector-jdbc-2.4.1.Final-plugin.tar.gz
+
+6. Grant permissions for debezium user:
+    docker exec -it <mysql_container_name> mysql -uroot -p
+
+    CREATE USER 'debezium'@'%' IDENTIFIED BY 'debezium_password';
+    GRANT SELECT, RELOAD, SHOW DATABASES, REPLICATION SLAVE, REPLICATION CLIENT ON *.* TO 'debezium'@'%';
+    FLUSH PRIVILEGES;
+
+Create new table and insert some test data there.
+
+7. Compose and deploy new docker images:
+    docker compose up -d --build
+
+8. Verify that Kafka connect is running:
+    curl -s http://localhost:8083/ | jq
+
+9. Register Connector via Kafka Connect API:
+    curl -i -X POST -H "Accept:application/json" -H "Content-Type:application/json" \
+    --data @debezium-mysql.json http://localhost:8083/connectors
+Check that it is running:
+    curl -s http://localhost:8083/connectors/ | jq
+And verify the status of it:
+    curl -X GET http://localhost:8083/connectors/mariadb-connector/status
+Verify if it receives messages
+	docker exec -it kafka-1 kafka-consumer-groups.sh --bootstrap-server kafka-1:9092 --group connect-mariadb-sink --describe
+
+10.Repeat same with jdbc:
+    curl -i -X POST -H "Accept:application/json" -H "Content-Type:application/json" \
+    --data @jdbc-sink.json http://localhost:8083/connectors
+
+
+10. If everything is set-up correctly, you should see list of topics Kafak has:
+    docker exec -it kafka-1 kafka-topics.sh --bootstrap-server kafka-1:9092 --list
+Check if openemr-changes.openemr and mariadb_schema_history are there. I have many topics there
+
+11. To see the messages itself run this command. It should return changes to the tables architecture (like creation or dropping)
+    docker exec -it kafka-1 kafka-console-consumer.sh --bootstrap-server kafka-1:9092 --topic mariadb_schema_history --from-beginning
+If you want to see changes for a row of data, you have to use specific table name
+For example openemr-changes.openemr.test_kafka means:
+topic = openemr-changes
+schema = openemr
+table = test_kafka
+Command;
+    docker exec -it kafka kafka-console-consumer.sh --bootstrap-server kafka:9092 --topic openemr-changes.openemr.test_kafka --from-beginning
+
+It should return to you json format file
+mariadb_schema_history can be replaced to any other topic you have available
+but at least mariadb_schema_history should have topic available if you've had some activity on sql server
+
+12. To check if messages were consumed by jdbc container:
+    docker exec -it kafka-1 kafka-consumer-groups.sh --bootstrap-server kafka-1:9092 --group <topic_name_in_file> --describe
+If CURRENT-OFFSET is "-" and LAG has values, then jdbc not processing messages
+You can check the logs using:
+    docker logs kafka-connect --tail=50
+
+13. In case of problems / if you need to do changes to the json configurations;
+Delete the connectors by using:
+    curl -X DELETE http://localhost:8083/connectors/<connector_name>
+For example:
+    curl -X DELETE http://localhost:8083/connectors/mariadb-sink
+    curl -X DELETE http://localhost:8083/connectors/mariadb-sink
+
+Restart the docker:
+    docker restart kafka-connect
+Post again the connectors like mentioned in step 9 and 10
+
+14. The current setup for JDBC only looks for changes in specific table
+defined under parameter table.name.format
