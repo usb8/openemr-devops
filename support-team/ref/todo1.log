@@ -1,0 +1,27 @@
+root@cch:~/openemr-devops/support-team/ref# docker exec -it kafka-1 kafka-consumer-groups.sh --bootstrap-server kafka-1:9092 --group connect-mariadb-sink --describe
+root@cch:~/openemr-devops/support-team/ref# docker exec -it kafka-1 kafka-consumer-groups.sh --bootstrap-server kafka-1:9092 --group connect-mariadb-sink --describe
+
+Error: Executing consumer group command failed due to org.apache.kafka.common.errors.TimeoutException: Call(callName=findCoordinator, deadlineMs=1741169764603, tries=1, nextAllowedTryMs=1741169764704) timed out at 1741169764604 after 1 attempt(s)
+java.util.concurrent.ExecutionException: org.apache.kafka.common.errors.TimeoutException: Call(callName=findCoordinator, deadlineMs=1741169764603, tries=1, nextAllowedTryMs=1741169764704) timed out at 1741169764604 after 1 attempt(s)
+        at org.apache.kafka.common.internals.KafkaFutureImpl.wrapAndThrow(KafkaFutureImpl.java:45)
+        at org.apache.kafka.common.internals.KafkaFutureImpl.access$000(KafkaFutureImpl.java:32)
+        at org.apache.kafka.common.internals.KafkaFutureImpl$SingleWaiter.await(KafkaFutureImpl.java:89)
+        at org.apache.kafka.common.internals.KafkaFutureImpl.get(KafkaFutureImpl.java:260)
+        at kafka.admin.ConsumerGroupCommand$ConsumerGroupService.$anonfun$describeConsumerGroups$1(ConsumerGroupCommand.scala:550)
+        at scala.collection.StrictOptimizedMapOps.map(StrictOptimizedMapOps.scala:28)
+        at scala.collection.StrictOptimizedMapOps.map$(StrictOptimizedMapOps.scala:27)
+        at scala.collection.convert.JavaCollectionWrappers$AbstractJMapWrapper.map(JavaCollectionWrappers.scala:309)
+        at kafka.admin.ConsumerGroupCommand$ConsumerGroupService.describeConsumerGroups(ConsumerGroupCommand.scala:549)
+        at kafka.admin.ConsumerGroupCommand$ConsumerGroupService.collectGroupsOffsets(ConsumerGroupCommand.scala:565)
+        at kafka.admin.ConsumerGroupCommand$ConsumerGroupService.describeGroups(ConsumerGroupCommand.scala:368)
+        at kafka.admin.ConsumerGroupCommand$.run(ConsumerGroupCommand.scala:73)
+        at kafka.admin.ConsumerGroupCommand$.main(ConsumerGroupCommand.scala:60)
+        at kafka.admin.ConsumerGroupCommand.main(ConsumerGroupCommand.scala)
+Caused by: org.apache.kafka.common.errors.TimeoutException: Call(callName=findCoordinator, deadlineMs=1741169764603, tries=1, nextAllowedTryMs=1741169764704) timed out at 1741169764604 after 1 attempt(s)
+Caused by: org.apache.kafka.common.errors.TimeoutException: Timed out waiting for a node assignment. Call: findCoordinator
+
+
+root@cch:~/openemr-devops/support-team/ref# docker exec -it kafka-1 kafka-consumer-groups.sh --bootstrap-server kafka-1:9092 --group connect-mariadb-sink --describe
+[2025-03-05 10:17:28,379] WARN [AdminClient clientId=adminclient-1] Connection to node -1 (kafka-1/172.18.0.9:9092) could not be established. Broker may not be available. (org.apache.kafka.clients.NetworkClient)
+[2025-03-05 10:17:28,498] WARN [AdminClient clientId=adminclient-1] Connection to node -1 (kafka-1/172.18.0.9:9092) could not be established. Broker may not be available. (org.apache.kafka.clients.NetworkClient)
+[2025-03-05 10:17:28,703] WARN [AdminClient clientId=adminclient-1] Connection to node -1 (kafka-1/172.18.0.9:9092) could not be established. Broker may not be available. (org.apache.kafka.clients.NetworkClient)

@@ -10,6 +10,7 @@ services:
   mysql:
     restart: always
     image: mariadb:10.11
+    container_name: mysql
     command: [
       'mysqld',
       '--character-set-server=utf8mb4',
@@ -21,6 +22,7 @@ services:
     ]
     volumes:
     - databasevolume:/var/lib/mysql
+    - ./ref/init.sql:/docker-entrypoint-initdb.d/init.sql
     environment:
       MYSQL_ROOT_PASSWORD: root
   openemr:
