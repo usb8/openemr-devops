@@ -10,6 +10,7 @@ services:
   mysql:
     restart: always
     image: mariadb:10.11
+    container_name: mysql
     command: [
       'mysqld',
       '--character-set-server=utf8mb4',
@@ -68,18 +69,18 @@ services:
     ports:
       - "2181:2181"
 
-  # Kafka Broker
-  kafka:
-    image: wurstmeister/kafka:2.13-2.8.1
-    container_name: kafka
-    restart: always
-    depends_on:
-      - zookeeper
-    environment:
-      KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+  # # Kafka Broker
+  # kafka:
+  #   image: wurstmeister/kafka:2.13-2.8.1
+  #   container_name: kafka
+  #   restart: always
+  #   depends_on:
+  #     - zookeeper
+  #   environment:
+  #     KAFKA_BROKER_ID: 1
+  #     KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+  #     KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+  #     KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
 
   # Kafka Connect with Debezium
   kafka-1:
