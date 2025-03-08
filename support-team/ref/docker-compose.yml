@@ -59,7 +59,6 @@ services:
       '--server-id=2'
     ]
 
-   # Zookeeper (Kafka dependency)
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
     container_name: zookeeper
@@ -69,20 +68,6 @@ services:
     ports:
       - "2181:2181"
 
-  # # Kafka Broker
-  # kafka:
-  #   image: wurstmeister/kafka:2.13-2.8.1
-  #   container_name: kafka
-  #   restart: always
-  #   depends_on:
-  #     - zookeeper
-  #   environment:
-  #     KAFKA_BROKER_ID: 1
-  #     KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-  #     KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
-  #     KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
-
-  # Kafka Connect with Debezium
   kafka-1:
     image: wurstmeister/kafka:2.13-2.8.1
     container_name: kafka-1
@@ -147,7 +132,89 @@ services:
     ports:
       - "8083:8083"
 
+  # Hospital 2
+  mysql-hospital2:
+    restart: always
+    image: mariadb:10.11
+    container_name: mysql-hospital2
+    command: [
+      'mysqld',
+      '--character-set-server=utf8mb4',
+      '--server-id=3',
+      '--log-bin=mysql-bin',
+      '--binlog-format=row',
+      '--gtid-strict-mode=ON',
+      '--log-slave-updates=ON'
+    ]
+    volumes:
+    - databasevolume-hospital2:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+
+  openemr-hospital2:
+    restart: always
+    image: openemr/openemr:7.0.2
+    ports:
+    - 8080:80
+    - 8443:443
+    volumes:
+    - logvolume02:/var/log
+    - sitevolume-hospital2:/var/www/localhost/htdocs/openemr/sites
+    environment:
+      MYSQL_HOST: mysql-hospital2
+      MYSQL_ROOT_PASS: root
+      MYSQL_USER: openemr
+      MYSQL_PASS: openemr
+      OE_USER: admin
+      OE_PASS: pass
+    depends_on:
+    - mysql-hospital2
+
+  # Hospital 3
+  mysql-hospital3:
+    restart: always
+    image: mariadb:10.11
+    container_name: mysql-hospital3
+    command: [
+      'mysqld',
+      '--character-set-server=utf8mb4',
+      '--server-id=4',
+      '--log-bin=mysql-bin',
+      '--binlog-format=row',
+      '--gtid-strict-mode=ON',
+      '--log-slave-updates=ON'
+    ]
+    volumes:
+    - databasevolume-hospital3:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+
+  openemr-hospital3:
+    restart: always
+    image: openemr/openemr:7.0.2
+    ports:
+    - 8081:80
+    - 8444:443
+    volumes:
+    - logvolume03:/var/log
+    - sitevolume-hospital3:/var/www/localhost/htdocs/openemr/sites
+    environment:
+      MYSQL_HOST: mysql-hospital3
+      MYSQL_ROOT_PASS: root
+      MYSQL_USER: openemr
+      MYSQL_PASS: openemr
+      OE_USER: admin
+      OE_PASS: pass
+    depends_on:
+    - mysql-hospital3
+
 volumes:
   logvolume01: {}
   sitevolume: {}
   databasevolume: {}
+  logvolume02: {}
+  sitevolume-hospital2: {}
+  databasevolume-hospital2: {}
+  logvolume03: {}
+  sitevolume-hospital3: {}
+  databasevolume-hospital3: {}

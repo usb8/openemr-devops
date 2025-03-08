@@ -7,7 +7,7 @@
       "connection.url": "jdbc:mysql://mysql-replica:3306/openemr",
       "connection.username": "root",
       "connection.password": "root",
-      "topics.regex": "openemr-changes\\..*",
+      "topics.regex": "openemr-changes-hospital1\\..*|openemr-changes-hospital2\\..*|openemr-changes-hospital3\\..*",
       "table.name.format": "${topic}",
       "auto.create": "true",
       "auto.evolve": "true",
@@ -26,7 +26,7 @@
       "transforms.key.type": "org.apache.kafka.connect.transforms.ExtractKeyFromStruct",
       "transforms.key.fields": "",
       "transforms.key.fallback.strategy": "hash",
-      "transforms.regexrouter.regex": "openemr-changes\\.(.*)\\.(.*)",
+      "transforms.regexrouter.regex": "openemr-changes-hospital(\\d+)\\.(.*)",
       "transforms.regexrouter.replacement": "$2",
       "errors.log.enable": "true",
       "errors.log.include.messages": "true"
