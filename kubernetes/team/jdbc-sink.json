@@ -4,7 +4,7 @@
       "connection.driver": "org.mariadb.jdbc.Driver",
       "connector.class": "io.debezium.connector.jdbc.JdbcSinkConnector",
       "tasks.max": "1",
-      "connection.url": "jdbc:mysql://mysql-replica:3306/openemr",
+      "connection.url": "jdbc:mysql://mysql-2:3306/openemr",
       "connection.username": "root",
       "connection.password": "root",
       "topics.regex": "openemr-changes-1\\..*|openemr-changes-2\\..*|openemr-changes-3\\..*",

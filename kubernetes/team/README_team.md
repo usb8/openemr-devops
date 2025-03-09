@@ -27,7 +27,7 @@ use openemr;
 # 'add a new patient'
 select * from patient_data;
 
-docker exec -it mysql-replica mysql -uroot -proot
+docker exec -it mysql-2 mysql -uroot -proot
 use openemr;
 select * from openemr_patient_data;
 ```
@@ -39,7 +39,7 @@ docker exec -it kafka-1 kafka-consumer-groups.sh --bootstrap-server kafka-1:9092
 ```
 
 5. To see the messages itself run this command. It should return changes to the tables architecture (like creation or dropping)
-`docker exec -it kafka-1 kafka-console-consumer.sh --bootstrap-server kafka-1:9092 --topic mariadb_schema_history --from-beginning`
+<!-- `docker exec -it kafka-1 kafka-console-consumer.sh --bootstrap-server kafka-1:9092 --topic mariadb_schema_history --from-beginning` -->
 
 <!-- If you want to see changes for a row of data, you have to use specific table name
 For example openemr-changes.openemr.test_kafka means:
@@ -104,7 +104,7 @@ INSERT INTO patient_data (
     '12345', 'Anytown', 'CA', 'US', 'D1234567', '123-45-6789', 'Engineer', '555-1234', '555-5678', '555-8765', 
     '555-4321', 1, 'Active', 'Spouse', NOW(), 'Male', 'Dr. Smith', '123', 1, 2, 'john.doe@example.com', 
     'john.doe@direct.example.com', 'Caucasian', 'White', 'Non-Hispanic', 'Christian', 'No', 'No', '4', '5000', 
-    'No billing notes', 'No', NOW(), 'PUB127', 7, 'Generic1', 'Value1', 'Generic2', 'Value2', 'Yes', 'Yes', 'Yes', 
+    'No billing notes', 'No', NOW(), 'PUB121', 1, 'Generic1', 'Value1', 'Generic2', 'Value2', 'Yes', 'Yes', 'Yes', 
     'Yes', 'No', 'No', 'Squad1', 1, 'Referral', 'User text 1', 'User text 2', 'User text 3', 'User text 4', 
     'User text 5', 'User text 6', 'User text 7', 'User text 8', 'User list 1', 'User list 2', 'User list 3', 
     'User list 4', 'User list 5', 'User list 6', 'User list 7', 'standard', NOW(), '2025-01-01', 'No', '2025-01-01', 
