@@ -9,13 +9,7 @@ Would not consider this production quality, but will be a good working, starting
 
 # Use
 1. Install (and then start) Kubernetes with Minikube or Kind or other.
-    - For Minikube or other, can find online documentation.
     - For Kind, see below for instructions sets with 1 node or 4 nodes.
-        - 1 node:
-            ```bash
-            kind create cluster
-            kubectl cluster-info --context kind-kind
-            ```
         - 4 nodes (1 control-plane node and 3 worker nodes), which will store shared volumes in host at /tmp/hostpath-provisioner to allow nodes to share volumes (you will need to remove the contents of the /tmp/hostpath-provisioner when tearing this down to prevent the shared volumes causing issues when rebuild it):
             ```bash
             kind create cluster --config kind-config-4-nodes.yaml
@@ -37,77 +31,8 @@ Would not consider this production quality, but will be a good working, starting
     ```bash
     kubectl get all
     ```
-      - It will look something like this when completed:
-          ```console
-          NAME                              READY   STATUS    RESTARTS   AGE
-          pod/mysql-sts-0                   1/1     Running   0          111s
-          pod/mysql-sts-1                   1/1     Running   0          91s
-          pod/openemr-7889cf48d8-9jdfl      1/1     Running   0          111s
-          pod/openemr-7889cf48d8-qphrw      1/1     Running   0          111s
-          pod/openemr-7889cf48d8-zlx9f      1/1     Running   0          111s
-          pod/phpmyadmin-f4d9bfc69-rx82d    1/1     Running   0          111s
-          pod/redis-0                       1/1     Running   0          111s
-          pod/redis-1                       1/1     Running   0          77s
-          pod/redis-2                       1/1     Running   0          55s
-          pod/redisproxy-744b7749dc-c6pkw   1/1     Running   0          111s
-          pod/redisproxy-744b7749dc-k8rzp   1/1     Running   0          111s
-          pod/sentinel-0                    1/1     Running   0          111s
-          pod/sentinel-1                    1/1     Running   0          34s
-          pod/sentinel-2                    1/1     Running   0          30s
-
-          NAME                 TYPE           CLUSTER-IP     EXTERNAL-IP   PORT(S)                         AGE
-          service/kubernetes   ClusterIP      10.96.0.1      <none>        443/TCP                         3m40s
-          service/mysql        ClusterIP      None           <none>        3306/TCP                        111s
-          service/openemr      LoadBalancer   10.96.6.51     <pending>     8080:32561/TCP,8090:32468/TCP   111s
-          service/phpmyadmin   NodePort       10.96.64.163   <none>        8081:32195/TCP,8091:31981/TCP   111s
-          service/redis        ClusterIP      None           <none>        6379/TCP                        111s
-          service/redisproxy   ClusterIP      None           <none>        6379/TCP                        111s
-          service/sentinel     ClusterIP      None           <none>        5000/TCP                        111s
-
-          NAME                         READY   UP-TO-DATE   AVAILABLE   AGE
-          deployment.apps/openemr      3/3     3            3           111s
-          deployment.apps/phpmyadmin   1/1     1            1           111s
-          deployment.apps/redisproxy   2/2     2            2           111s
-
-          NAME                                    DESIRED   CURRENT   READY   AGE
-          replicaset.apps/openemr-7889cf48d8      3         3         3       111s
-          replicaset.apps/phpmyadmin-f4d9bfc69    1         1         1       111s
-          replicaset.apps/redisproxy-744b7749dc   2         2         2       111s
-
-          NAME                         READY   AGE
-          statefulset.apps/mysql-sts   2/2     111s
-          statefulset.apps/redis       3/3     111s
-          statefulset.apps/sentinel    3/3     111s
-          ```
 4. Access openemr web: `http://<externalIp>:30002` or `localhost:30002`
   - Login with: admin/pass
-<!-- 4. Getting the url link to OpenEMR:
-    - If using minikube, can get the link to go to OpenEMR with following command (use the top link for http and bottom link for https):
-        ```bash
-        minikube service openemr --url
-        ```
-        - It will look something like this:
-            ```console
-            http://192.168.99.100:31314
-            http://192.168.99.100:30613
-            ```
-    - If using kind, then can use the 3***** port(s) (1st is http, 2nd is https) shown in step 3 (at `service/openemr`) above with the ip address obtained from following command:
-        ```bash
-        docker inspect kind-control-plane | grep "IPAddress" -->
-5. Getting the url link to phpMyAdmin:
-    - If using minikube, can get the link to go to phpMyAdmin with following command:
-        ```bash
-        minikube service phpmyadmin --url
-        ```
-        - It will look something like this:
-            ```console
-            http://192.168.99.100:30571
-            http://192.168.99.100:30578
-            ```
-    - If using kind, then can use the 3***** port(s) (1st is http, 2nd is https) shown in step 3 (at `service/phpmyadmin`) above with the ip address obtained from following command:
-        ```bash
-        docker inspect kind-control-plane | grep "IPAddress"
-        ```
 6. Some cool replicas stuff with OpenEMR. The OpenEMR docker pods are run as a replica set (since it is set to 3 replicas in this OpenEMR deployment script). Gonna cover how to view the replica set and how to change the number of replicas on the fly in this step.
     - First. lets list the replica set like this:
         ```bash
