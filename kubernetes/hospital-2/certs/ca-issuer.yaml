@@ -1,7 +1,7 @@
 apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
-  name: ca-issuer
+  name: hospital-2-ca-issuer
 spec:
   ca:
-    secretName: ca-key-pair
+    secretName: hospital-2-ca-key-pair

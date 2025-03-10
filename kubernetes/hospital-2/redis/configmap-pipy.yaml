@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: pipy-config
+  name: hospital-2-pipy-config
 data:
   config.json: |
     {
@@ -9,7 +9,11 @@ data:
         "redisAdminPass" : "adminpassword",
         "debug" : false,
         "port" : 6379,
-        "servers" : ["redis-0.redis:6379", "redis-1.redis:6379", "redis-2.redis:6379"],
+        "servers" : [
+            "hospital-2-redis-0.hospital-2-redis",
+            "hospital-2-redis-1.hospital-2-redis",
+            "hospital-2-redis-2.hospital-2-redis"
+        ],
         "connectTimeout" : "1s",
         "readTimeout" : "1s",
         "healthcheck" : {

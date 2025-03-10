@@ -1,15 +1,15 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: ca-certificate
+  name: hospital-2-ca-certificate
 spec:
-  secretName: ca-key-pair
+  secretName: hospital-2-ca-key-pair
   duration: 87660h # 10y
   renewBefore: 360h # 15d
   subject:
     organizations:
-      - OpenEMR admin
-  commonName: OpenEMR admin
+      - "Hospital 2 Admin"
+  commonName: "Hospital 2 Admin"
   isCA: true
   privateKey:
     size: 2048
@@ -19,6 +19,6 @@ spec:
     - digital signature
     - key encipherment
   issuerRef:
-    name: selfsigned-issuer
+    name: hospital-2-selfsigned-issuer
     kind: Issuer
     group: cert-manager.io

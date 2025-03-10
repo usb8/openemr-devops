@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: redis-acl
+  name: hospital-2-redis-acl
 data:
   users.acl: |
     user admin on >adminpassword ~* &* +@all

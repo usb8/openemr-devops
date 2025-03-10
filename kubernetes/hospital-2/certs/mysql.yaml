@@ -1,11 +1,11 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: mysql
+  name: hospital-2-mysql
 spec:
-  secretName: mysql-server-certs
-  duration: 87660h # 10y
-  renewBefore: 360h # 15d
+  secretName: hospital-2-mysql-server-certs
+  duration: 87660h
+  renewBefore: 360h
   isCA: false
   privateKey:
     size: 2048
@@ -18,11 +18,11 @@ spec:
   subject:
     organizations:
       - mysql
-  commonName: mysql
+  commonName: hospital-2-mysql
   dnsNames:
-    - mysql-sts-0
-    - mysql-sts-0.mysql.default.svc.cluster.local
+    - hospital-2-mysql-sts-0
+    - hospital-2-mysql-sts-0.mysql.default.svc.cluster.local
   issuerRef:
-    name: ca-issuer
+    name: hospital-2-ca-issuer
     kind: Issuer
     group: cert-manager.io

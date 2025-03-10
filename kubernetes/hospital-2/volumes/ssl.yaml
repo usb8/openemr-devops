@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: sslvolume
+  name: hospital-2-sslvolume
 spec:
   accessModes:
   - ReadWriteOnce

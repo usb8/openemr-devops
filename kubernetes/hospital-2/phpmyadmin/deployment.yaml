@@ -2,37 +2,37 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:  
   labels:
-    name: phpmyadmin
-  name: phpmyadmin
+    name: hospital-2-phpmyadmin
+  name: hospital-2-phpmyadmin
 spec:
   replicas: 1
   selector:
     matchLabels:
-      name: phpmyadmin
+      name: hospital-2-phpmyadmin
   template:
     metadata:      
       labels:
-        name: phpmyadmin
+        name: hospital-2-phpmyadmin
     spec:
       containers:
       - env:
         - name: PMA_HOSTS
           value: mysql
         image: phpmyadmin/phpmyadmin
-        name: phpmyadmin
+        name: hospital-2-phpmyadmin
         command: ["/wrapper.sh"]
         volumeMounts:
-        - name: phpmyadmin-server-certs
+        - name: hospital-2-phpmyadmin-server-certs
           mountPath: /certs
-        - name: mysql-phpmyadmin-client-certs
+        - name: hospital-2-mysql-phpmyadmin-client-certs
           mountPath: /etc/mysql
-        - name: phpmyadmin-config-map
+        - name: hospital-2-phpmyadmin-config-map
           mountPath: /etc/phpmyadmin/config.user.inc.php
           subPath: config.user.inc.php
-        - name: phpmyadmin-config-map
+        - name: hospital-2-phpmyadmin-config-map
           mountPath: /etc/apache2/sites-enabled/000-default.conf
           subPath: 000-default.conf
-        - name: phpmyadmin-config-map
+        - name: hospital-2-phpmyadmin-config-map
           mountPath: /wrapper.sh
           subPath: wrapper.sh
         ports:
@@ -46,9 +46,9 @@ spec:
             cpu: 500m
             memory: 2G
       volumes:
-      - name: phpmyadmin-server-certs
+      - name: hospital-2-phpmyadmin-server-certs
         secret:
-          secretName: phpmyadmin-server-certs
+          secretName: hospital-2-phpmyadmin-server-certs
           items:
           - key: ca.crt
             path: ca.crt
@@ -56,9 +56,9 @@ spec:
             path: tls.crt
           - key: tls.key
             path: tls.key
-      - name: mysql-phpmyadmin-client-certs
+      - name: hospital-2-mysql-phpmyadmin-client-certs
         secret:
-          secretName: mysql-phpmyadmin-client-certs
+          secretName: hospital-2-mysql-phpmyadmin-client-certs
           items:
           - key: ca.crt
             path: ca.pem
@@ -67,7 +67,7 @@ spec:
           #  path: tls.crt
           #- key: tls.key
           #  path: tls.key
-      - name: phpmyadmin-config-map
+      - name: hospital-2-phpmyadmin-config-map
         configMap:
-          name: phpmyadmin-configmap
+          name: hospital-2-phpmyadmin-configmap
           defaultMode: 0744

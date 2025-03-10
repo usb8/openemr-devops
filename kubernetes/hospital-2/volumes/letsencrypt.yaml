@@ -3,8 +3,8 @@ kind: PersistentVolumeClaim
 metadata:
   creationTimestamp: null
   labels:
-    io.kompose.service: letsencryptvolume
-  name: letsencryptvolume
+    io.kompose.service: hospital-2-letsencryptvolume
+  name: hospital-2-letsencryptvolume
 spec:
   accessModes:
   - ReadWriteOnce

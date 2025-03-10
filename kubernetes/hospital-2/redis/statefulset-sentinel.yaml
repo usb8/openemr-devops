@@ -1,18 +1,17 @@
-# Sentinel StatefulSet : Redis High availability with Sentinel on Kubernetes(K8s)
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: sentinel
+  name: hospital-2-sentinel
 spec:
-  serviceName: sentinel
+  serviceName: hospital-2-sentinel
   replicas: 3
   selector:
     matchLabels:
-      app: sentinel
+      app: hospital-2-sentinel
   template:
     metadata:
       labels:
-        app: sentinel
+        app: hospital-2-sentinel
     spec:
       initContainers:
       - name: config
@@ -21,7 +20,7 @@ spec:
         args:
           - |
             REDIS_PASSWORD=adminpassword
-            nodes=redis-0.redis,redis-1.redis,redis-2.redis
+            nodes=hospital-2-redis-0.hospital-2-redis,hospital-2-redis-1.hospital-2-redis,hospital-2-redis-2.hospital-2-redis
             echo "Looping through the redis list to see if Redis Master node is available now"
             while [ 1 ]
             do
@@ -57,10 +56,10 @@ spec:
             " > /etc/redis/sentinel.conf
             cat /etc/redis/sentinel.conf
         volumeMounts:
-        - name: redis-config
+        - name: hospital-2-redis-config
           mountPath: /etc/redis/
       containers:
-      - name: sentinel
+      - name: hospital-2-sentinel
         image: redis:alpine
         command: ["redis-sentinel"]
         args: ["/etc/redis/sentinel.conf"]
@@ -68,16 +67,16 @@ spec:
         - containerPort: 5000
           name: sentinel
         volumeMounts:
-        - name: redis-config
+        - name: hospital-2-redis-config
           mountPath: /etc/redis/
-        - name: data
+        - name: hospital-2-data
           mountPath: /data
       volumes:
-      - name: redis-config
+      - name: hospital-2-redis-config
         emptyDir: {}
   volumeClaimTemplates:
   - metadata:
-      name: data
+      name: hospital-2-data
     spec:
       accessModes: [ "ReadWriteOnce" ]
       resources:

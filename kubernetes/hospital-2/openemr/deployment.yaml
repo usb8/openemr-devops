@@ -2,27 +2,33 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:  
   labels:
-    name: openemr
-  name: openemr
+    name: hospital-2-openemr
+  name: hospital-2-openemr
 spec:
   replicas: 1
   selector:
     matchLabels:
-      name: openemr
+      name: hospital-2-openemr
   strategy:
     type: Recreate
   template:
     metadata:      
       labels:
-        name: openemr
+        name: hospital-2-openemr
     spec:
       initContainers:
-      - name: init-mysql-wait
+      - name: hospital-2-init-mysql-wait
         image: busybox:1.28
-        command: ['sh', '-c', "until nslookup mysql.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for mysql; sleep 2; done"]
-      - name: init-redis-wait
+        command:
+        - sh
+        - -c
+        - "until nslookup hospital-2-mysql.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for mysql; sleep 2; done"
+      - name: hospital-2-init-redis-wait
         image: busybox:1.28
-        command: ['sh', '-c', "until nslookup redis.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for redis; sleep 2; done"]
+        command:
+        - sh
+        - -c
+        - "until nslookup redisproxy.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for redis; sleep 2; done"
       containers:
       - env:
         - name: MYSQL_HOST
@@ -57,7 +63,7 @@ spec:
         #- name: FORCE_DATABASE_X509_CONNECT
           value: "1"
         image: openemr/openemr:7.0.2
-        name: openemr
+        name: hospital-2-openemr
         ports:
         - containerPort: 80
         - containerPort: 443
@@ -67,18 +73,18 @@ spec:
             memory: 1G
         volumeMounts:
         - mountPath: /root/certs/mysql/server
-          name: mysql-openemr-client-certs
+          name: hospital-2-mysql-openemr-client-certs
         - mountPath: /var/www/localhost/htdocs/openemr/sites
-          name: websitevolume
+          name: hospital-2-websitevolume
         - mountPath: /etc/ssl
-          name: sslvolume
+          name: hospital-2-sslvolume
         - mountPath: /etc/letsencrypt
-          name: letsencryptvolume
+          name: hospital-2-letsencryptvolume
       restartPolicy: Always     
       volumes:
-      - name: mysql-openemr-client-certs
+      - name: hospital-2-mysql-openemr-client-certs
         secret:
-          secretName: mysql-openemr-client-certs
+          secretName: hospital-2-mysql-openemr-client-certs
           items:
           - key: ca.crt
             path: mysql-ca
@@ -87,12 +93,12 @@ spec:
           #  path: mysql-cert
           #- key: tls.key
           #  path: mysql-key
-      - name: websitevolume
+      - name: hospital-2-websitevolume
         persistentVolumeClaim:
-          claimName: websitevolume
-      - name: sslvolume
+          claimName: hospital-2-websitevolume
+      - name: hospital-2-sslvolume
         persistentVolumeClaim:
-          claimName: sslvolume
-      - name: letsencryptvolume
+          claimName: hospital-2-sslvolume
+      - name: hospital-2-letsencryptvolume
         persistentVolumeClaim:
-          claimName: letsencryptvolume
+          claimName: hospital-2-letsencryptvolume

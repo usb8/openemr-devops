@@ -1,6 +1,6 @@
 apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
-  name: selfsigned-issuer
+  name: hospital-2-selfsigned-issuer
 spec:
   selfSigned: {}

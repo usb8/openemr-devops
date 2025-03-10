@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: mysql-sts
+  name: hospital-2-mysql-sts
 spec:
-  serviceName: "mysql"
+  serviceName: "hospital-2-mysql"
   replicas: 1
   selector:
     matchLabels:
-      app: mysql
+      app: hospital-2-mysql
   template:
     metadata:
       labels:
-        app: mysql
+        app: hospital-2-mysql
     spec:
       initContainers:
-      - name: init-mysql
+      - name: init-hospital-2-mysql
         args:
         - mysqld
         - --character-set-server=utf8mb4
@@ -50,14 +50,14 @@ spec:
           ls /etc/mysql/conf.d/
           cat /etc/mysql/conf.d/server-id.cnf
         volumeMounts:
-          - name: mysql-config-map
+          - name: hospital-2-mysql-config-map
             mountPath: /mnt/config-map
-          - name: mysql-config
+          - name: hospital-2-mysql-config
             mountPath: /etc/mysql/conf.d/
           - name: initdb
             mountPath: /docker-entrypoint-initdb.d
       containers:
-      - name: mysql
+      - name: hospital-2-mysql
         args:
         - mysqld
         - --character-set-server=utf8mb4
@@ -66,38 +66,28 @@ spec:
         - containerPort: 3306
           name: mysql-port
         env:
-        # Using Secrets
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: mysql-credentials
+              name: hospital-2-mysql-credentials
               key: password
         - name: MYSQL_INITDB_SKIP_TZINFO
           value: "1"
-        # Mount volume from persistent volume claim
         volumeMounts:
-        - name: mysql-server-certs
+        - name: hospital-2-mysql-server-certs
           mountPath: /etc/mysql/ssl/main/
-        - name: mysql-replication-certs
+        - name: hospital-2-mysql-replication-certs
           mountPath: /etc/mysql/ssl/replication/
-        - name: datadir
+        - name: hospital-2-datadir
           mountPath: /var/lib/mysql/
-        - name: mysql-config
+        - name: hospital-2-mysql-config
           mountPath: /etc/mysql/conf.d/
         - name: initdb
           mountPath: /docker-entrypoint-initdb.d
-      # - name: metrics-exporter
-      #   image: prom/mysqld-exporter:v0.14.0
-      #   ports:
-      #     - containerPort: 9104
-      #       name: metrics
-      #   env:
-      #     - name: DATA_SOURCE_NAME
-      #       value: "root:root@(localhost:3306)/"      
       volumes:
-      - name: mysql-server-certs
+      - name: hospital-2-mysql-server-certs
         secret:
-          secretName: mysql-server-certs
+          secretName: hospital-2-mysql-server-certs
           items:
           - key: ca.crt
             path: ca.crt
@@ -105,9 +95,9 @@ spec:
             path: tls.crt
           - key: tls.key
             path: tls.key
-      - name: mysql-replication-certs
+      - name: hospital-2-mysql-replication-certs
         secret:
-          secretName: mysql-replication-certs
+          secretName: hospital-2-mysql-replication-certs
           items:
           - key: ca.crt
             path: ca.crt
@@ -115,17 +105,16 @@ spec:
             path: tls.crt
           - key: tls.key
             path: tls.key
-      - name: mysql-config-map
+      - name: hospital-2-mysql-config-map
         configMap:
-          name: mysql-configmap
-          #defaultMode: 0544
-      - name: mysql-config
+          name: hospital-2-mysql-configmap
+      - name: hospital-2-mysql-config
         emptyDir: {}
       - name: initdb
         emptyDir: {}
   volumeClaimTemplates:
   - metadata:
-      name: datadir
+      name: hospital-2-datadir
     spec:
       accessModes: [ "ReadWriteOnce" ]
       resources:

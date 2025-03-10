@@ -40,3 +40,39 @@ kubectl apply \
     -f hospital-1/openemr/secret.yaml \
     -f hospital-1/openemr/deployment.yaml \
     -f hospital-1/openemr/service.yaml
+
+# kubectl apply \
+#     -f hospital-2/certs/selfsigned-issuer.yaml \
+#     -f hospital-2/certs/ca-certificate.yaml \
+#     -f hospital-2/certs/ca-issuer.yaml \
+#     -f hospital-2/certs/mysql.yaml \
+#     -f hospital-2/certs/mysql-replication.yaml \
+#     -f hospital-2/certs/mysql-openemr-client.yaml \
+#     -f hospital-2/certs/phpmyadmin.yaml \
+#     -f hospital-2/certs/mysql-phpmyadmin-client.yaml
+# echo "...waiting 15 seconds to ensure certs are created..."
+# sleep 15
+
+# kubectl apply \
+#     -f hospital-2/mysql/configmap.yaml \
+#     -f hospital-2/mysql/secret.yaml \
+#     -f hospital-2/mysql/service.yaml \
+#     -f hospital-2/mysql/statefulset.yaml \
+#     -f hospital-2/redis/configmap-main.yaml \
+#     -f hospital-2/redis/configmap-acl.yaml \
+#     -f hospital-2/redis/configmap-pipy.yaml \
+#     -f hospital-2/redis/statefulset-redis.yaml \
+#     -f hospital-2/redis/statefulset-sentinel.yaml \
+#     -f hospital-2/redis/deployment-redisproxy.yaml \
+#     -f hospital-2/redis/service-redis.yaml \
+#     -f hospital-2/redis/service-sentinel.yaml \
+#     -f hospital-2/redis/service-redisproxy.yaml \
+#     -f hospital-2/phpmyadmin/configmap.yaml \
+#     -f hospital-2/phpmyadmin/deployment.yaml \
+#     -f hospital-2/phpmyadmin/service.yaml \
+#     -f hospital-2/volumes/letsencrypt.yaml \
+#     -f hospital-2/volumes/ssl.yaml \
+#     -f hospital-2/volumes/website.yaml \
+#     -f hospital-2/openemr/secret.yaml \
+#     -f hospital-2/openemr/deployment.yaml \
+#     -f hospital-2/openemr/service.yaml

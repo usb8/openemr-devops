@@ -1,11 +1,11 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: mysql-phpmyadmin-client
+  name: hospital-2-mysql-phpmyadmin-client
 spec:
-  secretName: mysql-phpmyadmin-client-certs
-  duration: 87660h # 10y
-  renewBefore: 360h # 15d
+  secretName: hospital-2-mysql-phpmyadmin-client-certs
+  duration: 87660h
+  renewBefore: 360h
   isCA: false
   privateKey:
     size: 2048
@@ -18,8 +18,8 @@ spec:
   subject:
     organizations:
       - phpmyadmin
-  commonName: phpmyadmin
+  commonName: hospital-2-phpmyadmin
   issuerRef:
-    name: ca-issuer
+    name: hospital-2-ca-issuer
     kind: Issuer
     group: cert-manager.io
