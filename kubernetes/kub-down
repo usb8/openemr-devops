@@ -1,34 +1,34 @@
 #!/bin/sh
 
 kubectl delete \
-    -f app-1/certs/selfsigned-issuer.yaml \
-    -f app-1/certs/ca-certificate.yaml \
-    -f app-1/certs/ca-issuer.yaml \
-    -f app-1/certs/mysql.yaml \
-    -f app-1/certs/mysql-replication.yaml \
-    -f app-1/certs/mysql-openemr-client.yaml \
-    -f app-1/certs/phpmyadmin.yaml \
-    -f app-1/certs/mysql-phpmyadmin-client.yaml
+    -f hospital-1/certs/selfsigned-issuer.yaml \
+    -f hospital-1/certs/ca-certificate.yaml \
+    -f hospital-1/certs/ca-issuer.yaml \
+    -f hospital-1/certs/mysql.yaml \
+    -f hospital-1/certs/mysql-replication.yaml \
+    -f hospital-1/certs/mysql-openemr-client.yaml \
+    -f hospital-1/certs/phpmyadmin.yaml \
+    -f hospital-1/certs/mysql-phpmyadmin-client.yaml
 
 kubectl delete -f https://github.com/cert-manager/cert-manager/releases/download/v1.11.0/cert-manager.yaml
 
 kubectl delete \
-    -f app-1/mysql/configmap.yaml \
-    -f app-1/mysql/secret.yaml \
-    -f app-1/mysql/service.yaml \
-    -f app-1/mysql/statefulset.yaml \
-    -f app-1/redis/configmap-main.yaml \
-    -f app-1/redis/configmap-acl.yaml \
-    -f app-1/redis/configmap-pipy.yaml \
-    -f app-1/redis/statefulset-redis.yaml \
-    -f app-1/redis/statefulset-sentinel.yaml \
-    -f app-1/redis/deployment-redisproxy.yaml \
-    -f app-1/redis/service-redis.yaml \
-    -f app-1/redis/service-sentinel.yaml \
-    -f app-1/redis/service-redisproxy.yaml \
-    -f app-1/phpmyadmin/configmap.yaml \
-    -f app-1/phpmyadmin/deployment.yaml \
-    -f app-1/phpmyadmin/service.yaml \
-    -f app-1/openemr/secret.yaml \
-    -f app-1/openemr/deployment.yaml \
-    -f app-1/openemr/service.yaml
+    -f hospital-1/mysql/configmap.yaml \
+    -f hospital-1/mysql/secret.yaml \
+    -f hospital-1/mysql/service.yaml \
+    -f hospital-1/mysql/statefulset.yaml \
+    -f hospital-1/redis/configmap-main.yaml \
+    -f hospital-1/redis/configmap-acl.yaml \
+    -f hospital-1/redis/configmap-pipy.yaml \
+    -f hospital-1/redis/statefulset-redis.yaml \
+    -f hospital-1/redis/statefulset-sentinel.yaml \
+    -f hospital-1/redis/deployment-redisproxy.yaml \
+    -f hospital-1/redis/service-redis.yaml \
+    -f hospital-1/redis/service-sentinel.yaml \
+    -f hospital-1/redis/service-redisproxy.yaml \
+    -f hospital-1/phpmyadmin/configmap.yaml \
+    -f hospital-1/phpmyadmin/deployment.yaml \
+    -f hospital-1/phpmyadmin/service.yaml \
+    -f hospital-1/openemr/secret.yaml \
+    -f hospital-1/openemr/deployment.yaml \
+    -f hospital-1/openemr/service.yaml
