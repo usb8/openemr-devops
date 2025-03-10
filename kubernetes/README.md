@@ -31,7 +31,7 @@ Would not consider this production quality, but will be a good working, starting
     ```bash
     kubectl get all
     ```
-4. Access openemr web: `http://<externalIp>:30002` or `localhost:30002`
+4. Access openemr web: `http://<externalIp>:30001` or `localhost:30001`
   - Login with: admin/pass
 6. Some cool replicas stuff with OpenEMR. The OpenEMR docker pods are run as a replica set (since it is set to 3 replicas in this OpenEMR deployment script). Gonna cover how to view the replica set and how to change the number of replicas on the fly in this step.
     - First. lets list the replica set like this:
@@ -91,3 +91,6 @@ Would not consider this production quality, but will be a good working, starting
         ````bash
         sudo rm -fr /tmp/hostpath-provisioner
         ```` -->
+---
+---
+---

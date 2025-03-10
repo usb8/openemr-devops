@@ -17,6 +17,10 @@ kubectl delete \
     -f hospital-1/mysql/secret.yaml \
     -f hospital-1/mysql/service.yaml \
     -f hospital-1/mysql/statefulset.yaml \
+    -f hospital-1/mysql-2/configmap.yaml \
+    -f hospital-1/mysql-2/secret.yaml \
+    -f hospital-1/mysql-2/service.yaml \
+    -f hospital-1/mysql-2/statefulset.yaml \
     -f hospital-1/redis/configmap-main.yaml \
     -f hospital-1/redis/configmap-acl.yaml \
     -f hospital-1/redis/configmap-pipy.yaml \
