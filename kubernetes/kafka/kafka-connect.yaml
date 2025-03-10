@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka-connect
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kafka-connect
+  template:
+    metadata:
+      labels:
+        app: kafka-connect
+    spec:
+      initContainers:
+        - name: wait-for-kafka
+          image: busybox
+          command:
+            - sh
+            - -c
+            - |
+              until nc -z kafka-1 9092 && nc -z kafka-2 9093 && nc -z kafka-3 9094; do
+                echo waiting for Kafka brokers; sleep 5;
+              done
+      containers:
+        - name: kafka-connect
+          image: debezium/connect:2.4
+          env:
+            - name: BOOTSTRAP_SERVERS
+              value: "kafka-1:9092,kafka-2:9093,kafka-3:9094"
+            - name: GROUP_ID
+              value: "1"
+            - name: CONFIG_STORAGE_TOPIC
+              value: "debezium_configs"
+            - name: OFFSET_STORAGE_TOPIC
+              value: "debezium_offsets"
+            - name: STATUS_STORAGE_TOPIC
+              value: "debezium_status"
+            - name: KEY_CONVERTER_SCHEMAS_ENABLE
+              value: "false"
+            - name: VALUE_CONVERTER_SCHEMAS_ENABLE
+              value: "false"
+          ports:
+            - containerPort: 8083
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafka-connect
+spec:
+  type: NodePort
+  ports:
+  - port: 8083
+    targetPort: 8083
+    nodePort: 30005
+  selector:
+    app: kafka-connect
