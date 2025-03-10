@@ -23,13 +23,14 @@ curl -i -X POST -H "Accept:application/json" -H "Content-Type:application/json" 
 
 4. Verify more
 ```shell
-docker exec -it mysql-1 mysql -uroot -proot
+kubectl exec -it mysql-sts-0  -- mysql -uroot -proot
 use openemr;
 # describe patient_data;
 # 'add a new patient'
 select * from patient_data;
 
-docker exec -it mysql-2 mysql -uroot -proot
+kubectl exec -it mysql-2-sts-0  -- mysql -uroot -proot
+# SHOW DATABASES;
 use openemr;
 select * from openemr_patient_data;
 ```

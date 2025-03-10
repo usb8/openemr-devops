@@ -2,7 +2,7 @@
   "name": "mariadb-connector-1",
   "config": {
       "connector.class": "io.debezium.connector.mysql.MySqlConnector",
-      "database.hostname": "mysql-1",
+      "database.hostname": "mysql",
       "database.port": "3306",
       "database.user": "root",
       "database.password": "root",
